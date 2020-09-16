@@ -41,7 +41,7 @@ char Card::getSuit()
 
 void Card::setSuit(char s)
 {
-	if (s == 'H' || s == 'C' || s == 'D' && s == 'S')
+	if (s == 'H' || s == 'C' || s == 'D' || s == 'S')
 	{
 		suit = s;
 	}
@@ -57,12 +57,14 @@ int Card::getValue()
 string Card::getValueDisplay()
 {
 	string valueDisplay;
-	if (value < 11 && value >= 1)
+	if (value < 11 && value >1)
 		valueDisplay = to_string(value);
+	else if (value == 1)
+		valueDisplay = "A";
 	else if (value == 11)
 		valueDisplay = "J";
 	else if (value == 12)
-		valueDisplay = "q";
+		valueDisplay = "Q";
 	else if (value == 13)
 		valueDisplay = "K";
 	else
@@ -72,9 +74,9 @@ string Card::getValueDisplay()
 
 void Card::setValue(int v)
 {
-	if (v >= 0 && v <= 13)
+	if (v > 0 && v <= 13)
 	{
-		suit = v;
+		value = v;
 	}
 }
 
@@ -142,7 +144,7 @@ private:
 Deck::Deck()
 	:switcher(3, 1)
 {
-	for (int i = 1; i <= 14; i++)
+	for (int i = 1; i <= 13; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
@@ -162,7 +164,7 @@ Deck::Deck()
 				deck.push_back(c);
 			}
 			else {
-				Card c('D', i);
+				Card c('S', i);
 				deck.push_back(c);
 			}
 		}
@@ -202,10 +204,9 @@ void Deck::display()
 vector<Card> Deck::dealCards(int numCards)
 {
 	vector<Card> cardsDealt;
-	deck.pop_back();
 	for (int i = 0; i < numCards; i++)
 	{
-		cardsDealt.push_back(deck[0]);
+		cardsDealt.push_back(deck[deck.size() - 1 ]);
 		deck.pop_back();
 	}
 	return cardsDealt;
