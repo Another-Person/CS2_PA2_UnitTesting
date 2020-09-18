@@ -275,6 +275,7 @@ public:
 	Player();
 	void startGame();
 	void sortHand();
+	void setHand(vector<Card> newHand);
 	Card highCard();
 	bool isPair();
 	bool is2Pair();
@@ -313,6 +314,16 @@ void Player::sortHand()
 				swap(hand[i], hand[i + 1]);
 			}
 		}
+	}
+}
+
+void Player::setHand(vector<Card> newHand)
+{
+	int i = 0;
+	for (const Card &tempCard : newHand)
+	{
+		hand[i] = tempCard;
+		i++;
 	}
 }
 
@@ -458,4 +469,13 @@ bool Player::isRoyalFlush()
 	if (isFlush() && isStraight() && hand[0].getValue() == 1 && hand[4].getValue() == 13)
 		tf = true;
 	return tf;
+}
+
+TEST_CASE("Player Tests")
+{
+	Player testPlayer;
+	testPlayer.startGame();
+	testPlayer.sortHand();
+
+
 }
