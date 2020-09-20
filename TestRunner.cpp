@@ -275,7 +275,7 @@ public:
 	Player();
 	void startGame();
 	void sortHand();
-	void setHand(vector<Card> newHand);
+	void setHand(const vector<Card> &newHand);
 	Card highCard();
 	bool isPair();
 	bool is2Pair();
@@ -317,7 +317,7 @@ void Player::sortHand()
 	}
 }
 
-void Player::setHand(vector<Card> newHand)
+void Player::setHand(const vector<Card> &newHand)
 {
 	int i = 0;
 	for (const Card &tempCard : newHand)
@@ -475,7 +475,13 @@ TEST_CASE("Player Tests")
 {
 	Player testPlayer;
 	testPlayer.startGame();
-	testPlayer.sortHand();
 
+	vector<Card> testHand{ {'H',3}, {'S',13}, {'H',4}, {'C',3}, {'D',4} };
+	testPlayer.setHand( testHand );
+
+	SECTION("PAIR TESTS")
+	{
+		
+	}
 
 }
