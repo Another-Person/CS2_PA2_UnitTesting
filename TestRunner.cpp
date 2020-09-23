@@ -23,6 +23,9 @@ public:
 	void setValue(int v);
 	void display();
 
+	friend bool operator== (const Card& c1, const Card& c2);
+	friend bool operator!= (const Card& c1, const Card& c2);
+
 private:
 	char suit;
 	int value;
@@ -276,6 +279,7 @@ public:
 	void startGame();
 	void sortHand();
 	void setHand(const vector<Card> &newHand);
+	vector<Card> getHand();
 	Card highCard();
 	bool isPair();
 	bool is2Pair();
@@ -325,6 +329,11 @@ void Player::setHand(const vector<Card> &newHand)
 		hand[i] = tempCard;
 		i++;
 	}
+}
+
+vector<Card> Player::getHand()
+{
+	return hand;
 }
 
 Card Player::highCard()
@@ -476,12 +485,54 @@ TEST_CASE("Player Tests")
 	Player testPlayer;
 	testPlayer.startGame();
 
-	vector<Card> testHand{ {'H',3}, {'S',13}, {'H',4}, {'C',3}, {'D',4} };
-	testPlayer.setHand( testHand );
-
-	SECTION("PAIR TESTS")
+	
+	SECTION("Straight Flush Tests")
 	{
+		vector<Card> testHand{ { 'H', 3 }, { 'H', 7 }, { 'H', 6 }, { 'H', 5 }, { 'H', 4 } };
+		testPlayer.setHand(testHand);
+		testPlayer.sortHand();
 		
+		REQUIRE(testPlayer.isStraight() == true);
+		REQUIRE(testPlayer.isFlush() == true);
 	}
 
+	SECTION("Full House Tests")
+	{
+		vector<Card> testHand{ { 'H', 3 }, { 'S', 3 }, { 'H', 6 }, { 'D', 3 }, { 'D', 6 } };
+		testPlayer.setHand(testHand);
+		testPlayer.sortHand();
+
+		REQUIRE(testPlayer.isFullHouse() == true);
+	}
+
+	SECTION("High Card Tests")
+	{
+		vector<Card> testHand{ { 'H', 3 }, { 'S', 13 }, { 'H', 6 }, { 'C', 2 }, { 'D', 4 } };
+		testPlayer.setHand(testHand);
+		testPlayer.sortHand();
+
+		Card highCard = { 'S', 13 };
+		REQUIRE(testPlayer.highCard() == highCard);
+		REQUIRE(testPlayer.isPair() == false);
+		REQUIRE(testPlayer.is2Pair() == false);
+		REQUIRE(testPlayer.is3K() == false);
+		REQUIRE(testPlayer.is4K() == false);
+		REQUIRE(testPlayer.isFlush() == false);
+		REQUIRE(testPlayer.isFullHouse() == false);
+		REQUIRE(testPlayer.isRoyalFlush() == false);
+		REQUIRE(testPlayer.isStraight() == false);
+
+
+	}
+
+}
+
+bool operator==(const Card& c1, const Card& c2)
+{
+	return (c1.suit == c2.suit && c1.value == c2.value);
+}
+
+bool operator!=(const Card& c1, const Card& c2)
+{
+	return !(c1 == c2);
 }
